@@ -1,0 +1,50 @@
+int ledPin = 13;  // LED connected to digital pin 13
+int buttonPin = 7;    // pushbutton connected to digital pin 7
+int statepin = A1;
+
+int buttonprevstate = HIGH;
+int buttoncurrstate;
+
+int lightprevstate;
+int lightcurrstate;
+
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(ledPin, OUTPUT);  // sets the digital pin 13 as output
+  pinMode(buttonPin, INPUT);    // sets the digital pin 7 as input
+  pinMode(statepin, INPUT);    // sets the digital pin 7 as input
+}
+
+void loop() {
+  buttoncurrstate = digitalRead(buttonPin);
+  if(buttoncurrstate == LOW && buttonprevstate == HIGH){
+    lightprevstate = analogRead(statepin);
+    Serial.println(lightprevstate);
+    if(lightprevstate<1000){
+      digitalWrite(13,HIGH);
+      delay(100);
+      if(analogRead(statepin)<1000)
+      {
+        digitalWrite(13,LOW);
+      }    
+    }
+  } 
+
+  if(buttoncurrstate == HIGH && buttonprevstate == LOW){
+    
+    if(lightprevstate<1000){
+      digitalWrite(13,HIGH);
+      delay(100);
+      if(analogRead(statepin)>1000)
+      {
+        digitalWrite(13,LOW);
+      }    
+    }
+    
+  }
+
+  
+  buttonprevstate = buttoncurrstate;
+  delay(100);
+}
